@@ -3,11 +3,10 @@ from operator import itemgetter
 print("Songs To Learn 1.0 - by Joshua Stanley")
 
 # get data from a separate file
-in_file = open("List of songs.csv", 'r')
+in_file = open("List of songs.csv", 'r+')
 
 # format the data in the file
 song_list = [line.split(',')[:] for line in in_file]
-song_list.sort(key=itemgetter(1, 0))
 
 # display how many songs were loaded
 print(len(song_list), "songs loaded")
@@ -22,6 +21,9 @@ print(MENU)
 choice = input(">>> ").upper()
 while choice != "Q":
     if choice == "L":
+        # sort songs by artist
+        song_list.sort(key=itemgetter(1, 0))
+
         songs_learnt = 0
         songs_required = 0
         # list the songs
@@ -36,10 +38,30 @@ while choice != "Q":
         print("{} songs learned, {} songs still to learn".format(songs_learnt, songs_required))
 
     elif choice == "A":
-        print("A")
+
         # Get data for the song(Title, artist, year)
-        # Add the song into the list and sort by artist name
+        song_title = input("Title: ")
+        while len(song_title) == 0:
+            print("Input can not be blank")
+            song_title = input("Title: ")
+        song_artist = input("Artist: ")
+        while len(song_artist) == 0:
+            print("Input can not be blank")
+            song_artist = input("Artist: ")
+        song_year = input("Year: ")
+        while len(song_year) == 0:
+            print("Input can not be blank")
+            song_year = input("Year: ")
+        while int(song_year) < 0:
+            print("Number must be >= 0")
+            song_year = input("Year: ")
+
+        # Add the song into the list
+        new_song = [song_title, song_artist, song_year, "y"]
+        song_list.append(new_song)
+
         # display message stating song has been added
+        print("{} by {} {} added to song list".format(song_title, song_artist, song_year))
 
     elif choice == "C":
         print("C")
@@ -55,6 +77,8 @@ while choice != "Q":
     choice = input(">>> ").upper()
 
 # save the data to a separate document
+out_file = open("List of songs.csv", 'w')
+
 # display how many songs have been saved
 in_file.close()
 
