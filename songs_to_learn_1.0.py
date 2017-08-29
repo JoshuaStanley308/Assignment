@@ -3,7 +3,7 @@ from operator import itemgetter
 print("Songs To Learn 1.0 - by Joshua Stanley")
 
 # get data from a separate file
-in_file = open("List of songs.csv", 'r+')
+in_file = open("List of songs.csv", 'r')
 
 # format the data in the file
 song_list = [line.split(',')[:] for line in in_file]
@@ -59,14 +59,31 @@ while choice != "Q":
         # Add the song into the list
         new_song = [song_title, song_artist, song_year, "y"]
         song_list.append(new_song)
+        song_list.sort(key=itemgetter(1, 0))
 
         # display message stating song has been added
         print("{} by {} {} added to song list".format(song_title, song_artist, song_year))
 
     elif choice == "C":
-        print("C")
-
         # Get input from user for which song to be learnt
+        print("Enter the number of a song  to mark as learned")
+        song_number = int(input(">>> "))
+
+        if len(song_list) == 0:
+            print("Input can not be blank")
+            song_number = input(">>> ")
+        if song_number > len(song_list):
+            print("Invalid song number")
+            song_number = input(">>> ")
+        if song_number < 0:
+            print("Number must be >= 0")
+            song_number = input(">>> ")
+        if "y" not in song_list[song_number][3]:
+            print("You have already learned {}".format(song_list[song_number][0]))
+        else:
+            song_list[song_number][3] = "n"
+            print("{} by {} learned".format(song_list[song_number][0], song_list[song_number][2]))
+
         # check to see if is already been learnt
         # if learnt show menu
         # if not, display a message saying it has been learnt
@@ -78,7 +95,9 @@ while choice != "Q":
 
 # save the data to a separate document
 out_file = open("List of songs.csv", 'w')
-
+for line in song_list:
+    out_file.write("{}\n".format(line))
+out_file.close()
 # display how many songs have been saved
 in_file.close()
 
