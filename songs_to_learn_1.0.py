@@ -8,6 +8,12 @@ in_file = open("List of songs.csv", 'r')
 # format the data in the file
 song_list = [line.split(',')[:] for line in in_file]
 
+for i in range(len(song_list)):
+    if "y" in song_list[i][3]:
+        song_list[i][3] = "y"
+    else:
+        song_list[i][3] = "n"
+
 # display how many songs were loaded
 print(len(song_list), "songs loaded")
 
@@ -26,13 +32,16 @@ while choice != "Q":
 
         songs_learnt = 0
         songs_required = 0
-        # list the songs
+        max_song_length = max(len(song_list[i][0]))
+        max_artist_length = max(len(song_list[i][1]))
+
         for i in range(len(song_list)):
+            # list the songs
             if "y" in song_list[i][3]:
-                print("{}. * {:<30s} - {:<30s} ({})".format(i, song_list[i][0], song_list[i][1], song_list[i][2]))
+                print("{}. * {:{}} - {:<30s} ({})".format(i, song_list[i][0], max_song_length, song_list[i][1], song_list[i][2]))
                 songs_required += 1
             else:
-                print("{}.   {:<30s} - {:<30s} ({})".format(i, song_list[i][0], song_list[i][1], song_list[i][2]))
+                print("{}.   {:{}} - {:<30s} ({})".format(i, song_list[i][0], max_song_length, song_list[i][1], song_list[i][2]))
                 songs_learnt += 1
         # display the number of songs learnt and required
         print("{} songs learned, {} songs still to learn".format(songs_learnt, songs_required))
@@ -69,15 +78,24 @@ while choice != "Q":
         print("Enter the number of a song  to mark as learned")
         song_number = int(input(">>> "))
 
-        if len(song_list) == 0:
-            print("Input can not be blank")
-            song_number = input(">>> ")
-        if song_number > len(song_list):
-            print("Invalid song number")
-            song_number = input(">>> ")
-        if song_number < 0:
-            print("Number must be >= 0")
-            song_number = input(">>> ")
+        correct_input = False
+        while not correct_input:
+            try:
+                if len(song_list) == 0:
+                    print("Input can not be blank")
+                    song_number = input(">>> ")
+                elif song_number > len(song_list):
+                    print("Invalid song number")
+                    song_number = input(">>> ")
+                elif song_number < 0:
+                    print("Number must be >= 0")
+                    song_number = input(">>> ")
+                else:
+                    correct_input = True
+            except ValueError:
+                print("Invalid input")
+                song_number = input(">>> ")
+
         if "y" not in song_list[song_number][3]:
             print("You have already learned {}".format(song_list[song_number][0]))
         else:
@@ -94,11 +112,13 @@ while choice != "Q":
     choice = input(">>> ").upper()
 
 # save the data to a separate document
+#  display how many songs have been saved
+
 out_file = open("List of songs.csv", 'w')
-for line in song_list:
-    out_file.write("{}\n".format(line))
+for i in range(0, len(song_list)):
+    out_file.write("{}, {}, {}, {}\n".format(song_list[i][0], song_list[i][1], song_list[i][2], song_list[i][3]))
 out_file.close()
-# display how many songs have been saved
+
 in_file.close()
 
 print("Goodbye :)")
