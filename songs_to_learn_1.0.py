@@ -145,7 +145,7 @@ while choice != "Q":
             song_list[int(song_number)][3] = "n"
             print("{} by {} learned".format(song_list[int(song_number)][0], song_list[int(song_number)][1]))
 
-    # display a message if input is invalid and get another input
+    # display message if input is invalid and get another input
     else:
         print("Invalid menu choice")
     print(MENU)
