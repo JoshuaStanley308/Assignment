@@ -70,7 +70,7 @@ def complete_song(song_list):
     if songs_required != 0:
 
         # Get input from user for which song to be learnt
-        print("Enter the number of a song  to mark as learned")
+        print("Enter the number of a song to mark as learned")
         song_number = input(">>> ")
 
         # check to see if there are any errors in the input
