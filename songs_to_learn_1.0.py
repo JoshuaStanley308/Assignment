@@ -85,23 +85,21 @@ while choice != "Q":
             print("Input can not be blank")
             song_artist = input("Artist: ")
 
-        # get the release year
-        song_year = input("Year: ")
-
         correct_input = False
         while not correct_input:
             try:
+                # get the release year
+                song_year = input("Year: ")
+
+                # check to see if there are any errors in the input
                 if len(song_year) == 0:
                     print("Input can not be blank")
-                    song_year = input("Year: ")
                 elif int(song_year) < 0:
                     print("Number must be >= 0")
-                    song_year = input("Year: ")
-                elif int(song_year) > 0:
+                else:
                     correct_input = True
             except ValueError:
                 print("Invalid input; enter a valid number")
-                song_number = input(">>> ")
 
         # Add the song into the list
         new_song = [song_title, " {}".format(song_artist), " {}".format(song_year), "y"]
@@ -115,35 +113,48 @@ while choice != "Q":
 
     elif choice == "C":
 
-        # Get input from user for which song to be learnt
-        print("Enter the number of a song  to mark as learned")
-        song_number = input(">>> ")
+        # check to see how many songs have been learnt
+        songs_learnt = 0
+        songs_required = 0
+        for i in range(len(song_list)):
+            if song_list[i][3] == "y":
+                songs_required += 1
+            else:
+                songs_learnt += 1
 
-        # check to see if there are any errors in the input
-        correct_input = False
-        while not correct_input:
-            try:
-                if len(song_list) == 0:
-                    print("Input can not be blank")
-                    song_number = input(">>> ")
-                elif int(song_number) >= len(song_list):
-                    print("Invalid song number")
-                    song_number = input(">>> ")
-                elif int(song_number) < 0:
-                    print("Number must be >= 0")
-                    song_number = input(">>> ")
-                else:
-                    correct_input = True
-            except ValueError:
-                print("Invalid input; enter a valid number")
-                song_number = input(">>> ")
+        # check to see if all the songs have been learnt
+        if songs_required != 0:
+            # Get input from user for which song to be learnt
+            print("Enter the number of a song  to mark as learned")
+            song_number = input(">>> ")
 
-        # check to see if is already been learnt
-        if "y" not in song_list[int(song_number)][3]:
-            print("You have already learned {}".format(song_list[int(song_number)][0]))
+            # check to see if there are any errors in the input
+            correct_input = False
+            while not correct_input:
+                try:
+                    if len(song_list) == 0:
+                        print("Input can not be blank")
+                        song_number = input(">>> ")
+                    elif int(song_number) >= len(song_list):
+                        print("Invalid song number")
+                        song_number = input(">>> ")
+                    elif int(song_number) < 0:
+                        print("Number must be >= 0")
+                        song_number = input(">>> ")
+                    else:
+                        correct_input = True
+                except ValueError:
+                    print("Invalid input; enter a valid number")
+                    song_number = input(">>> ")
+
+            # check to see if is already been learnt
+            if "y" not in song_list[int(song_number)][3]:
+                print("You have already learned {}".format(song_list[int(song_number)][0]))
+            else:
+                song_list[int(song_number)][3] = "n"
+                print("{} by {} learned".format(song_list[int(song_number)][0], song_list[int(song_number)][1]))
         else:
-            song_list[int(song_number)][3] = "n"
-            print("{} by {} learned".format(song_list[int(song_number)][0], song_list[int(song_number)][1]))
+            print("No more songs to learn!")
 
     # display message if input is invalid and get another input
     else:
